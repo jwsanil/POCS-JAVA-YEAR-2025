@@ -25,7 +25,7 @@ public class FindSecondMinMax {
             if(num<min){  //3,1,7,2,9,4,0,6
                secondMin=min ;
                 min = num;                        //num<min num<secondMin
-            }else if( num<min && num>secondMin){  //3 <10 &  3> 2   min = 10 ,  secondMin = 3
+            }else if( num>min && num<secondMin){  //3 <10 &  3> 2   min = 10 ,  secondMin = 3
                 secondMin = num;
             }
             //finding max and sencod max
