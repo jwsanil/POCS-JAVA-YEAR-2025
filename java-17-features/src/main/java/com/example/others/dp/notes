@@ -1,0 +1,4 @@
+# Decorator Pattern #
+
+Decorator pattern is a structural design pattern that lets you add new behaviour to objects dynamically
+by wrapping them in decorator classes.

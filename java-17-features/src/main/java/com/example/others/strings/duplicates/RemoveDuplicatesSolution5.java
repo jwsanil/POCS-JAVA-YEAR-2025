@@ -1,4 +1,4 @@
-package com.example.others.duplicates;
+package com.example.others.strings.duplicates;
 
 public class RemoveDuplicatesSolution5 {
 

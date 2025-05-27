@@ -1,0 +1,48 @@
+What is Stream Api in Java?
+
+The Stream API, introduced in Java 8, provides a funcational approach to process collections of data.
+
+It allows operations such as filtering, mapping, and reducing, enabling concise and readable code.
+
+Stream do not store data; instead, they convery data from a source(like collections) through ap pipeline of
+computational operations.
+
+
+How does stream differ from a collection?
+
+Data storage: Collections store data in memory, where as Stream do not store data but process elements form a
+data source.
+
+
+Iteration: Collections manage their own iteration(external iteration), while Stream handles iteration internally.
+
+mutability: Collections allow modification( adding/removing elements), but Streams are immutable and do not alter the original data source.
+
+
+Reusability: Streams cannot be reused after a terminal operation; a new Stream must be created to process the data again.
+
+What are the main components of Steam pipeline?
+
+1) source: The data source, such as a collection, array, or I/O chanel.
+
+2)intermediate operations:
+
+Transformations that produce a new Stream, like filter(), map, and sorted().These operations are lazy and only execute when a terminal operation is
+
+invoked.
+
+3) Terminal Operations: Operations that produce result or side effect, Such as collect(), forEach, and reduce(). Executing terminal operation triggers the
+
+processing of stream pipeline.
+
+
+4) What is difference between intermediate and Terminal operations in Streams?
+
+Intermediate operations : Return a new Stream and are lazy, meaning they do not execute until a terminal operation is invoked. examples include filter(),
+map(), and sorte().
+
+Terminal Operations: Trigger the execution of the Stream pipeline and produce a result or side-effect. once a terminal operation is performed, the
+
+stream cannot be reused. Examples include collect, forEach, and reduce().
+
+
