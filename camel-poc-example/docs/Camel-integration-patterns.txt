@@ -1,0 +1,229 @@
+Routing Patterns → Choice, Splitter, Aggregator, Recipient List
+
+Transformation Patterns → Translator, Enricher
+
+Messaging Channels → Point-to-Point, Pub-Sub
+
+Messaging Endpoints → SEDA, JMS, HTTP, Kafka, etc.
+
+Error Handling & Reliability Patterns → Dead Letter Channel, Redelivery Policy, Idempotent Consumer
+
+
+--
+
+| **Category**       | **Pattern Examples**                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| Routing            | Choice, Splitter, Aggregator, Recipient List, Multicast, Routing Slip                 |
+| Transformation     | Translator, Enricher, Filter, Claim Check                                             |
+| Messaging Channels | Point-to-Point, Pub-Sub, Dead Letter, Guaranteed Delivery                             |
+| System Management  | Idempotent Consumer, Resequencer, Wire Tap, Load Balancer, Throttler, Circuit Breaker |
+| Endpoints          | Timer, File, FTP, HTTP, JMS, Kafka, SEDA, VM                                          |
+
+
+-----------
+
+
+
+Apache Camel – Integration Patterns Summary
+
+Apache Camel implements the Enterprise Integration Patterns (EIP) catalog, making it easier to integrate applications and services.
+
+🔹 1. Routing Patterns
+
+Content-Based Router → Route messages based on content.
+
+Recipient List → Dynamically send a message to multiple endpoints.
+
+Splitter → Break one message into multiple pieces.
+
+Aggregator → Combine related messages into one.
+
+Multicast → Send a message to multiple endpoints at once.
+
+Routing Slip → Route message dynamically based on a path list.
+
+Dynamic Router → Compute the next endpoint at runtime.
+
+curl -X POST http://localhost:8080/api/messages/dynamicRouter -H "Content-Type: text/plain" -d "Hello Dynamic Router"
+
+
+
+🔹 2. Transformation Patterns
+
+Message Translator → Convert message format or structure.
+
+Content Enricher → Add missing data by fetching from another source.
+
+Content Filter → Remove unneeded data from the message.
+
+Claim Check → Store part of the message temporarily and restore later.
+
+🔹 3. Messaging Channels
+
+Point-to-Point Channel → One sender, one receiver.
+
+Publish-Subscribe Channel → One sender, multiple subscribers.
+
+Dead Letter Channel → Store failed messages for later analysis.
+
+Guaranteed Delivery → Retry until successful delivery.
+
+🔹 4. System Management Patterns
+
+Idempotent Consumer → Prevent duplicate message processing.
+
+Resequencer → Reorder out-of-sequence messages.
+
+Wire Tap → Copy a message and send it to a secondary flow (for logging, audit, monitoring).
+
+Load Balancer → Distribute messages across multiple processors.
+
+Throttler → Control message flow rate.
+
+Circuit Breaker → Prevent calls to failing endpoints temporarily.
+
+🔹 5. Endpoint patterns
+.Timer/Quartz → Trigger routes on schedule.
+File/FTP/HTTP/JMS/Kafka → Connect with external systems.
+
+
+
+
+SEDA/VM → In-memory asynchronous queues.
+
+📝 Quick Cheat Sheet (Camel EIPs)
+
+
+
+--------------
+curl -X POST http://localhost:8080/api/messages -H "Content-Type: text/plain" -d "This is an order message"
+curl -X POST http://localhost:8080/api/messages -H "Content-Type: text/plain" -d "This is an invoice message"
+
+
+curl -X POST http://localhost:8080/api/messages/recipient -H "Content-Type: text/plain" -d "This is an urgent message"
+
+curl -X POST http://localhost:8080/api/messages/recipient -H "Content-Type: text/plain" -d "This is a normal message"
+
+
+splitter:
+
+curl -X POST http://localhost:8080/api/messages/split -H "Content-Type: text/plain" -d "apple,banana,orange"
+
+
+multicast:
+
+curl -X POST http://localhost:8080/api/messages/multicast -H "Content-Type: text/plain" -d "Hello Multicast"
+
+
+routing slip:
+
+curl -X POST http://localhost:8080/api/messages/routingSlip -H "Content-Type: text/plain" -d "Normal message"
+
+
+Message transfermations:
+----------
+
+transformation to josn:
+
+curl -X POST http://localhost:8080/api/translator -H "Content-Type: text/plain" -d "hello camel"
+
+
+enricher:
+
+curl -X POST http://localhost:8080/api/translator/enricher -H "Content-Type: text/plain" -d "Hello Enricher"
+curl -X POST http://localhost:8080/api/translator/enricher -H "Content-Type: text/plain" -d "Hello Enricher"
+
+filter:
+
+curl -X POST http://localhost:8080/api/translator/filter -H "Content-Type: text/plain" -d "This is an important message"
+
+
+curl -X POST http://localhost:8080/api/translator/filter -H "Content-Type: text/plain" -d "Ignore this message"
+
+
+claim check:
+
+curl -X POST http://localhost:8080/api/translator/claimCheck -H "Content-Type: text/plain" -d "Hello ClaimCheck"
+
+
+
+management:
+-----
+
+
+idemptotent:
+curl -X POST http://localhost:8080/api/management/idempotent -H "Content-Type: text/plain" -d "Hello"
+curl -X POST http://localhost:8080/api/management/idempotent -H "Content-Type: text/plain" -d "Hello"
+
+
+
+reqsequencer:
+curl -X POST http://localhost:8080/api/management/resequencer -H "Content-Type: text/plain" -d "3"
+curl -X POST http://localhost:8080/api/management/resequencer -H "Content-Type: text/plain" -d "1"
+curl -X POST http://localhost:8080/api/management/resequencer -H "Content-Type: text/plain" -d "2"
+
+
+wirtap:
+
+curl -X POST "http://localhost:8080/api/management/wiretap" -H "Content-Type: text/plain" -d "Hello WireTap"
+
+
+
+load balancer:
+curl -X POST http://localhost:8080/api/management/loadbalancer -H "Content-Type: text/plain" -d "Task1"
+curl -X POST http://localhost:8080/api/management/loadbalancer -H "Content-Type: text/plain" -d "Task2"
+curl -X POST http://localhost:8080/api/management/loadbalancer -H "Content-Type: text/plain" -d "Task3"
+curl -X POST http://localhost:8080/api/management/loadbalancer -H "Content-Type: text/plain" -d "Task4"
+
+
+
+throttler:
+
+curl -X POST http://localhost:8080/api/management/throttler -H "Content-Type: text/plain" -d "Msg1"
+curl -X POST http://localhost:8080/api/management/throttler -H "Content-Type: text/plain" -d "Msg2"
+curl -X POST http://localhost:8080/api/management/throttler -H "Content-Type: text/plain" -d "Msg3"
+curl -X POST http://localhost:8080/api/management/throttler -H "Content-Type: text/plain" -d "Msg4"
+
+circuit breker:
+
+curl -X POST http://localhost:8080/api/management/circuitBreaker -H "Content-Type: text/plain" -d "Hello CB"
+curl -X POST http://localhost:8080/api/management/circuitBreaker -H "Content-Type: text/plain" -d "fail this"
+
+
+
+
+endpoint patterns:
+
+timer
+curl -X GET http://localhost:8080/api/endpoint/trigger
+
+file:
+curl -X GET http://localhost:8080/api/endpoint/file
+
+ftp:
+curl -X GET http://localhost:8080/api/endpoint/ftp
+
+
+jms:
+curl -X POST "http://localhost:8080/api/endpoint/jms" -H "Content-Type: text/plain" -d "fail message"
+
+curl -X GET http://localhost:8080/api/endpoint/jms/read
+
+
+kafka
+
+curl -X GET http://localhost:8080/api/endpoint/kafka/read
+curl -X GET http://localhost:8080/api/endpoint/kafka
+
+
+dedalettter:
+
+curl -X POST "http://localhost:8080/api/endpoint/jms" -d "fail message"
+curl -X GET http://localhost:8080/api/endpoint/jms/dlc
+
+
+
+netstat -ano | findstr :8080
+
+taskkill /PID 12345 /F
+
