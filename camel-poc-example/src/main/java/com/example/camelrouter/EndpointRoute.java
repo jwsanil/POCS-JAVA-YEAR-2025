@@ -11,6 +11,14 @@ public class EndpointRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+
+        errorHandler(deadLetterChannel("jms:queue:deadLetterQueue")
+                .maximumRedeliveries(2)       // Retry 2 times
+                .redeliveryDelay(1000)        // Wait 1 second between retries
+                .retryAttemptedLogLevel(org.apache.camel.LoggingLevel.WARN)
+        );
+
+
         // ------------------------
         // Timer-based scheduled route
         // ------------------------
@@ -121,8 +129,59 @@ public class EndpointRoute extends RouteBuilder {
 
 
 
+        // ------------------------
+// Manual JMS trigger route
+// ------------------------
+        from("direct:jmsRoute")
+                .routeId("jmsManualRoute")
+                .log("Sending message to JMS queue: ${body}")
+                .to("jms:queue:exampleQueue");
+
+// ------------------------
+// JMS consumer route
+/*// ------------------------
+        from("jms:queue:exampleQueue")// disabling temportarily to enable /read/api
+                .routeId("jmsConsumerRoute")
+                .log("Received message from JMS queue: ${body}")
+                .process(exchange -> {
+                    String message = exchange.getIn().getBody(String.class);
+                    exchange.getIn().setBody("Processed JMS message: " + message);
+                })
+                .log("Processed JMS message: ${body}");
+
+
+*/
+
+        // ------------------------
+        // Manual Kafka trigger route
+        // ------------------------
+       /* from("direct:kafkaRoute")
+                .routeId("kafkaManualRoute")
+                .log("Sending message to Kafka topic: ${body}")
+                .to("kafka:exampleTopic?brokers=localhost:9092");
+
+
+*/
+
+        // ------------------------
+        // ActiveMQ Dead Letter Channel
+        // ------------------------
+        from("jms:queue:exampleQueue")
+                .routeId("jmsConsumerRoute")
+                .log("Received message from JMS queue: ${body}")
+                .process(exchange -> {
+                    String message = exchange.getIn().getBody(String.class);
+                    // Simulate failure if message contains "fail"
+                    if (message.contains("fail")) {
+                        throw new RuntimeException("Processing failed for message: " + message);
+                    }
+                    exchange.getIn().setBody("Processed JMS message: " + message);
+                })
+                .log("Processed JMS message: ${body}");
+
 
     }
+
 
 
 
