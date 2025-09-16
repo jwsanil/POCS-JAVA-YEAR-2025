@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>camel-content-router</artifactId>
+    <artifactId>camel-poc-example</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
@@ -83,37 +83,21 @@
             <version>4.8.0</version>
         </dependency>
 
-        <!-- Embedded Kafka for testing -->
-      <!--  <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <version>3.0.12</version>
-            <scope>runtime</scope>
-        </dependency>
-      --><!--  <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-web</artifactId>
-            <version>5.17.4</version>
-        </dependency>
+
+
+
+
 
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>9.4.54.v20240208</version>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-junit5</artifactId>
+            <version>4.8.0</version>
+            <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>9.4.54.v20240208</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-io</artifactId>
-            <version>9.4.54.v20240208</version>
-        </dependency>
--->
+
+
     </dependencies>
 
     <build>
