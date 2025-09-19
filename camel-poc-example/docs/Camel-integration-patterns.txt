@@ -221,7 +221,9 @@ dedalettter:
 curl -X POST "http://localhost:8080/api/endpoint/jms" -d "fail message"
 curl -X GET http://localhost:8080/api/endpoint/jms/dlc
 
-
+sql:
+curl -X POST "http://localhost:8080/api/sql/insert" -H "Content-Type: text/plain" -d "Hello sql"
+curl -X GET http://localhost:8080/api/sql/all
 
 netstat -ano | findstr :8080
 
