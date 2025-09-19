@@ -1,7 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
@@ -9,6 +9,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
+    <!-- Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -16,8 +17,27 @@
         <relativePath/>
     </parent>
 
+    <properties>
+        <!-- Camel Version -->
+        <camel.version>4.8.0</camel.version>
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Import Camel BOM for consistent versioning -->
+            <dependency>
+                <groupId>org.apache.camel.springboot</groupId>
+                <artifactId>camel-spring-boot-dependencies</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!-- Spring Web for REST Controller -->
+        <!-- Spring Boot Starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -25,93 +45,76 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- Camel Starters -->
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-resilience4j-starter</artifactId>
-            <version>4.8.0</version>
+            <artifactId>camel-spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-ftp-starter</artifactId>
-            <version>4.8.0</version>
-        </dependency>
-
-
-
 
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-jackson-starter</artifactId>
-            <version>4.8.0</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-spring-boot-starter</artifactId>
-            <version>4.8.0</version>
+            <artifactId>camel-resilience4j-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-ftp-starter</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-jms-starter</artifactId>
-            <version>4.8.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-kafka-starter</artifactId>
+        </dependency>
+
+        <!-- ActiveMQ for JMS -->
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-broker</artifactId>
             <version>5.17.4</version>
         </dependency>
-
         <dependency>
             <groupId>javax.jms</groupId>
             <artifactId>javax.jms-api</artifactId>
             <version>2.0.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-kafka-starter</artifactId>
-            <version>4.8.0</version>
-        </dependency>
-
-
-
-
-
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test-junit5</artifactId>
-            <version>4.8.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
-       <!-- sql related-->
+        <!-- Database -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-
-
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
