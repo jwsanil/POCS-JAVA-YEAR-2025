@@ -1,0 +1,1202 @@
+# Java 8 Features
+
+1. Lambda Expressions
+2. Functional Interfaces
+3. Stream API
+4. Method References
+5. Default & Static Methods
+6. Optional
+7. Collectors
+8. Date & Time API
+9. Parallel Streams
+10. CompletableFuture
+11. Collection & Map Enhancements
+12. Base64 and StringJoiner
+
+# 1. Lambda Expression
+
+## What is a Lambda Expression?
+
+A lambda expression is a concise way to represent an implementation of a functional interface (an interface with a single abstract method). It lets you write behavior as data, avoiding the need for anonymous inner classes.
+
+## Syntax
+
+```java
+(parameters) -> expression
+```
+
+or
+
+```java
+(parameters) -> {
+    // multiple statements
+}
+```
+
+## Example (without lambda)
+
+```java
+Runnable r = new Runnable() {
+
+    @Override
+    public void run() {
+
+        System.out.println("Hello");
+
+    }
+};
+```
+
+## Example (with lambda)
+
+```java
+Runnable r = () -> System.out.println("Hello");
+```
+
+## Benefits
+
+* Less code
+* Better readability
+* Easier to work with the Stream API
+* Supports functional programming concepts
+
+# 2. What is Functional Programming?
+
+Functional programming is a programming style where computation is done by composing and applying functions, rather than by changing program state or using mutable objects.
+
+Java is primarily an object-oriented language, but Java 8 introduced features that support a functional programming style.
+
+## Characteristics
+
+* Functions can be passed as arguments (using lambdas).
+* Avoids unnecessary changes to data (immutability is encouraged).
+* Focuses on what to do, not how to do it.
+* Uses operations like map, filter, and reduce on collections.
+
+## Example
+
+Suppose you want to print only even numbers.
+
+### Traditional approach
+
+```java
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+
+for (Integer n : list) {
+    if (n % 2 == 0) {
+        System.out.println(n);
+    }
+}
+```
+
+### Functional programming approach
+
+```java
+list.stream()
+    .filter(n -> n % 2 == 0)
+    .forEach(System.out::println);
+```
+
+Here:
+
+* `filter()` selects even numbers.
+* `forEach()` prints them.
+* `n -> n % 2 == 0` is a lambda expression.
+
+## Relationship between Lambda Expressions and Functional Programming
+
+* Lambda expression is a feature introduced in Java 8.
+* Functional programming is a programming style.
+* Java uses lambda expressions to enable functional programming.
+
+## Interview Answer (Short)
+
+### What is a lambda expression?
+
+A lambda expression is an anonymous function introduced in Java 8 that provides a concise way to implement a functional interface.
+
+### What is functional programming?
+
+Functional programming is a programming paradigm that treats functions as first-class constructs, emphasizing writing code by composing functions rather than relying on mutable state and imperative control flow. In Java 8, it is enabled through features like lambda expressions, functional interfaces, and the Stream API.
+
+# 3. What is Stream API?
+
+The Stream API is a feature introduced in Java 8 that allows you to process collections of data (such as List, Set, and arrays) in a functional and declarative way. It lets you perform operations like filtering, mapping, sorting, and reducing without writing explicit loops.
+
+A stream does not store data. Instead, it provides a sequence of elements from a source (such as a collection or array) and allows you to process those elements.
+
+## Why use the Stream API?
+
+* Less code
+* More readable and expressive
+* Supports functional programming using lambda expressions
+* Can process data sequentially or in parallel
+
+## Basic Stream Flow
+
+```text
+Collection
+   ↓
+stream()
+   ↓
+Intermediate Operations
+(filter, map, sorted, distinct, limit)
+   ↓
+Terminal Operation
+(forEach, collect, reduce, count)
+   ↓
+Result
+```
+
+## Example 1: Filter Even Numbers
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+numbers.stream()
+       .filter(n -> n % 2 == 0)
+       .forEach(System.out::println);
+```
+
+### Output
+
+```text
+2
+4
+6
+```
+
+## Example 2: Square Each Number
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4);
+
+List<Integer> squares = numbers.stream()
+                               .map(n -> n * n)
+                               .toList();
+
+System.out.println(squares);
+```
+
+### Output
+
+```text
+[1, 4, 9, 16]
+```
+
+## Types of Stream Operations
+
+### 1. Intermediate Operations
+
+These return another stream, so you can chain multiple operations.
+
+Examples:
+
+* `filter()`
+* `map()`
+* `sorted()`
+* `distinct()`
+* `limit()`
+* `skip()`
+
+### 2. Terminal Operations
+
+These produce the final result or perform an action. After a terminal operation, the stream cannot be reused.
+
+Examples:
+
+* `forEach()`
+* `collect()`
+* `reduce()`
+* `count()`
+* `findFirst()`
+* `findAny()`
+* `anyMatch()`
+* `allMatch()`
+
+## Interview Definition
+
+The Stream API is a Java 8 feature that provides a functional way to process collections of data. It supports operations such as filtering, mapping, sorting, and reducing, allowing developers to write concise, readable, and efficient code without explicit iteration.
+
+## Important Points
+
+* A stream does not modify the original collection (unless you explicitly perform modifying operations elsewhere).
+* A stream does not store data; it processes data from a source.
+* Intermediate operations are lazy—they execute only when a terminal operation is invoked.
+* A stream can be consumed only once. After a terminal operation, you must create a new stream if you want to process the data again.
+
+# 4. What are Method References?
+
+A method reference is a shorthand way to refer to an existing method using `::` instead of writing a lambda expression.
+
+It makes code shorter and more readable when the lambda simply calls an existing method.
+
+## Syntax
+
+```java
+ClassName::methodName
+```
+
+or
+
+```java
+objectReference::methodName
+```
+
+or
+
+```java
+ClassName::new
+```
+
+## Example 1: Static Method Reference
+
+### Using Lambda
+
+```java
+list.forEach(name -> System.out.println(name));
+```
+
+### Using Method Reference
+
+```java
+list.forEach(System.out::println);
+```
+
+Here,
+
+```text
+System.out::println
+```
+
+is equivalent to
+
+```text
+name -> System.out.println(name)
+```
+
+## Example 2: Static Method
+
+```java
+int sum = IntStream.rangeClosed(1, 5)
+                   .reduce(0, Integer::sum);
+```
+
+```text
+Integer::sum
+```
+
+is equivalent to
+
+```text
+(a, b) -> Integer.sum(a, b)
+```
+
+## Types of Method References
+
+### 1. Reference to a Static Method
+
+```java
+Integer::sum
+Math::max
+```
+
+Equivalent to:
+
+```text
+(a, b) -> Integer.sum(a, b)
+```
+
+### 2. Reference to an Instance Method of a Particular Object
+
+```java
+PrintStream out = System.out;
+
+list.forEach(out::println);
+```
+
+Equivalent to:
+
+```text
+name -> out.println(name)
+```
+
+### 3. Reference to an Instance Method of an Arbitrary Object of a Particular Type
+
+```java
+List<String> names = Arrays.asList("java", "python");
+
+names.stream()
+    .map(String::toUpperCase)
+    .forEach(System.out::println);
+```
+
+Equivalent to:
+
+```text
+name -> name.toUpperCase()
+```
+
+### Output
+
+```text
+JAVA
+PYTHON
+```
+
+### 4. Constructor Reference
+
+```java
+Supplier<List<String>> supplier = ArrayList::new;
+
+List<String> list = supplier.get();
+```
+
+Equivalent to:
+
+```java
+Supplier<List<String>> supplier = () -> new ArrayList<>();
+```
+
+## When to Use Method References
+
+Use a method reference only when the lambda expression simply calls an existing method.
+
+Instead of:
+
+```java
+numbers.forEach(n -> System.out.println(n));
+```
+
+Write:
+
+```java
+numbers.forEach(System.out::println);
+```
+
+## Interview Definition
+
+A method reference is a Java 8 feature that provides a shorthand syntax for referring to an existing method or constructor using the `::` operator. It is used in place of a lambda expression when the lambda only invokes an existing method.
+
+## Quick Summary
+
+| Lambda Expression             | Method Reference      |
+| ----------------------------- | --------------------- |
+| `(a, b) -> Integer.sum(a, b)` | `Integer::sum`        |
+| `x -> System.out.println(x)`  | `System.out::println` |
+| `s -> s.toUpperCase()`        | `String::toUpperCase` |
+| `() -> new ArrayList<>()`     | `ArrayList::new`      |
+
+Remember: A method reference does not call the method immediately. It simply provides a reference to the method, which is invoked later by the functional interface (such as Consumer, Function, or IntBinaryOperator).
+
+# 6. Optional
+
+## What is Optional?
+
+`Optional<T>` is a container object introduced in Java 8 that may or may not contain a value. It is primarily used to reduce the chances of NullPointerException and to make the absence of a value explicit.
+
+Instead of returning null, a method can return an Optional.
+
+## Why was Optional introduced?
+
+Before Java 8, methods often returned null when no value was available.
+
+### Example
+
+```java
+public String getName() {
+    return null;
+}
+```
+
+### Using it
+
+```java
+String name = getName();
+
+System.out.println(name.length()); // NullPointerException
+```
+
+The caller must always remember to write:
+
+```java
+if (name != null) {
+    System.out.println(name.length());
+}
+```
+
+If they forget, the program throws a NullPointerException.
+
+## How Optional solves this
+
+Instead of returning null:
+
+```java
+public Optional<String> getName() {
+    return Optional.of("John");
+}
+```
+
+or
+
+```java
+public Optional<String> getName() {
+    return Optional.empty();
+}
+```
+
+### Usage
+
+```java
+Optional<String> name = getName();
+
+name.ifPresent(System.out::println);
+```
+
+or
+
+```java
+String value = name.orElse("Unknown");
+```
+
+No explicit null check is needed.
+
+## Why wasn't Optional.of() alone enough?
+
+There are three ways to create an Optional:
+
+### 1. Optional.of(value)
+
+Use when the value is guaranteed to be non-null.
+
+```java
+Optional<String> name = Optional.of("John");
+```
+
+### Result
+
+```text
+Optional[John]
+```
+
+### If value is null
+
+```java
+Optional<String> name = Optional.of(null);
+```
+
+### Output
+
+```text
+NullPointerException
+```
+
+So Optional.of() does not accept null.
+
+### 2. Optional.ofNullable(value)
+
+Use when the value may be null.
+
+```java
+String name = null;
+
+Optional<String> opt = Optional.ofNullable(name);
+```
+
+### Output
+
+```text
+Optional.empty
+```
+
+If the value is not null:
+
+```java
+String name = "John";
+
+Optional<String> opt = Optional.ofNullable(name);
+```
+
+### Output
+
+```text
+Optional[John]
+```
+
+## Why introduce ofNullable()?
+
+Imagine data coming from a database:
+
+```java
+String employeeName = database.getName();
+```
+
+You don't know whether employeeName is null.
+
+If you write:
+
+```java
+Optional.of(employeeName);
+```
+
+and the database returns null, your code throws a NullPointerException.
+
+Instead:
+
+```java
+Optional.ofNullable(employeeName);
+```
+
+If employeeName is "John" → Optional[John]
+
+If employeeName is null → Optional.empty
+
+So ofNullable() safely handles both cases.
+
+### 3. Optional.empty()
+
+Creates an empty Optional.
+
+```java
+Optional<String> name = Optional.empty();
+```
+
+### Output
+
+```text
+Optional.empty
+```
+
+Useful when you know there is no value to return.
+
+## Comparison
+
+| Method                       | Accepts null? | Result                                       |
+| ---------------------------- | ------------- | -------------------------------------------- |
+| `Optional.of(value)`         | ❌ No          | Throws NullPointerException if value is null |
+| `Optional.ofNullable(value)` | ✅ Yes         | Returns Optional.empty() if value is null    |
+| `Optional.empty()`           | N/A           | Creates an empty Optional                    |
+
+## Common Methods
+
+### isPresent()
+
+```java
+Optional<String> name = Optional.of("John");
+
+if (name.isPresent()) {
+    System.out.println(name.get());
+}
+```
+
+### get()
+
+```java
+Optional<String> name = Optional.of("John");
+
+System.out.println(name.get());
+```
+
+Returns the value.
+
+⚠ If the Optional is empty:
+
+```java
+Optional.empty().get();
+```
+
+Throws:
+
+```text
+NoSuchElementException
+```
+
+### orElse()
+
+```java
+Optional<String> name = Optional.empty();
+
+System.out.println(name.orElse("Unknown"));
+```
+
+### Output
+
+```text
+Unknown
+```
+
+### orElseGet()
+
+Computes the default value only if needed.
+
+```java
+String value = name.orElseGet(() -> "Guest");
+```
+
+### orElseThrow()
+
+```java
+String value = name.orElseThrow(
+       () -> new RuntimeException("Name not found"));
+```
+
+### ifPresent()
+
+```java
+Optional.of("John")
+       .ifPresent(System.out::println);
+```
+
+### Output
+
+```text
+John
+```
+
+### map()
+
+Transforms the contained value if present.
+
+```java
+Optional<String> name = Optional.of("John");
+
+Optional<String> upper =
+       name.map(String::toUpperCase);
+
+System.out.println(upper.get());
+```
+
+### Output
+
+```text
+JOHN
+```
+
+## Interview Question
+
+### Why do we need Optional.ofNullable() when we already have Optional.of()?
+
+### Answer:
+
+Optional.of() is used when you are certain the value is not null. Passing null throws a NullPointerException.
+
+Optional.ofNullable() is used when the value may or may not be null. It safely returns Optional.empty() instead of throwing an exception.
+
+## Interview Definition
+
+Optional is a container object introduced in Java 8 that may or may not contain a value. It helps reduce NullPointerException by explicitly representing the presence or absence of a value. Optional.of() is used for non-null values, Optional.ofNullable() is used for values that may be null, and Optional.empty() represents no value.
+
+# 5. Default Methods and Static Methods in Interfaces (Java 8)
+
+Before Java 8, interfaces could contain only abstract methods.
+
+```java
+interface Vehicle {
+   void start();
+}
+```
+
+Java 8 introduced:
+
+* Default methods
+* Static methods
+
+These allow interfaces to have method implementations.
+
+## 1. Default Method
+
+A default method is a method inside an interface that has a body. Classes implementing the interface automatically inherit it unless they override it.
+
+### Syntax
+
+```java
+interface Vehicle {
+
+   default void start() {
+       System.out.println("Vehicle started");
+   }
+}
+```
+
+### Example
+
+```java
+interface Vehicle {
+
+   default void start() {
+       System.out.println("Vehicle started");
+   }
+}
+
+class Car implements Vehicle {
+}
+
+public class Demo {
+
+   public static void main(String[] args) {
+
+       Car car = new Car();
+
+       car.start();
+
+   }
+}
+```
+
+### Output
+
+```text
+Vehicle started
+```
+
+The Car class did not implement start(), but it can still use it because it is a default method.
+
+## Overriding a Default Method
+
+```java
+class Car implements Vehicle {
+
+   @Override
+   public void start() {
+       System.out.println("Car started");
+   }
+}
+```
+
+### Output
+
+```text
+Car started
+```
+
+## Why Default Methods?
+
+Suppose an interface is already used by hundreds of classes.
+
+Before Java 8:
+
+```java
+interface Vehicle {
+   void start();
+}
+```
+
+Later, you want to add:
+
+```java
+void stop();
+```
+
+All implementing classes would fail to compile because they must implement the new method.
+
+With Java 8:
+
+```java
+interface Vehicle {
+
+   void start();
+
+   default void stop() {
+       System.out.println("Stopped");
+   }
+}
+```
+
+Existing classes continue to work because they automatically inherit the default implementation.
+
+This is the main reason default methods were introduced: to allow interfaces to evolve without breaking existing implementations.
+
+## 2. Static Method
+
+A static method in an interface belongs to the interface itself, not to implementing classes.
+
+### Syntax
+
+```java
+interface Vehicle {
+
+   static void service() {
+       System.out.println("Vehicle Service");
+   }
+}
+```
+
+### Calling Static Method
+
+```java
+Vehicle.service();
+```
+
+Not
+
+```java
+Car car = new Car();
+
+car.service();   // Compile-time error
+```
+
+Static interface methods are not inherited by implementing classes.
+
+## Complete Example
+
+```java
+interface Vehicle {
+
+   default void start() {
+       System.out.println("Vehicle started");
+   }
+
+   static void service() {
+       System.out.println("Vehicle service");
+   }
+}
+
+class Car implements Vehicle {
+}
+
+public class Demo {
+
+   public static void main(String[] args) {
+
+       Car car = new Car();
+
+       car.start();          // Default method
+
+       Vehicle.service();    // Static method
+   }
+}
+```
+
+### Output
+
+```text
+Vehicle started
+Vehicle service
+```
+
+## Difference Between Default and Static Methods
+
+| Default Method                    | Static Method               |
+| --------------------------------- | --------------------------- |
+| Uses default keyword              | Uses static keyword         |
+| Has a method body                 | Has a method body           |
+| Inherited by implementing classes | Not inherited               |
+| Can be overridden                 | Cannot be overridden        |
+| Called using object reference     | Called using interface name |
+
+## Short
+
+### Default Method:
+
+A default method is a method with an implementation inside an interface. It allows new methods to be added to interfaces without breaking existing implementing classes.
+
+### Static Method:
+
+A static method is a method with an implementation inside an interface that belongs to the interface itself. It is invoked using the interface name and is not inherited by implementing classes.
+
+# Functional Programming Style
+
+Instead of changing a variable, you describe the computation using functions.
+
+```java
+int sum = IntStream.rangeClosed(1, 5)
+                  .reduce(0, Integer::sum);
+
+System.out.println(sum);
+```
+
+The reduce() method signature is:
+
+```java
+reduce(int identity, IntBinaryOperator op)
+```
+
+```text
+identity = 0 (initial value)
+op = Integer::sum
+```
+
+## Equivalent using a loop
+
+```java
+int result = 0;
+
+for (int i = 1; i <= 5; i++) {
+   result = result + i;
+}
+
+System.out.println(result); // 15+
+```
+
+# Comparator.comparing()
+
+Here Java compares employees based on salary.
+
+Equivalent idea:
+
+```text
+e -> e.getSalary()
+```
+
+So:
+
+```java
+Comparator.comparing(Employee::getSalary)
+```
+
+means:
+
+```text
+"Create a comparator using the value returned by getSalary()."
+```
+
+# Comparator.naturalOrder()
+
+This takes no argument:
+
+```java
+numbers.stream()
+    .sorted(Comparator.naturalOrder())
+    .toList();
+```
+
+For:
+
+```java
+List<Integer> numbers = List.of(30, 10, 20);
+```
+
+### Result
+
+```text
+[10, 20, 30]
+```
+
+It uses the object's natural ordering, which for Integer is numerical ascending order.
+
+## Employee example
+
+For Employee, naturalOrder() works only if Employee implements Comparable<Employee>:
+
+```java
+class Employee implements Comparable<Employee> {
+
+    private String name;
+    private int salary;
+
+    @Override
+    public int compareTo(Employee other) {
+        return Integer.compare(this.salary, other.salary);
+    }
+}
+```
+
+Then:
+
+```java
+employees.stream()
+    .sorted(Comparator.naturalOrder())
+    .toList();
+```
+
+will sort employees according to the compareTo() implementation — here, salary ascending.
+
+## Key difference
+
+```text
+Comparator.comparing(Employee::getSalary)
+        ↓
+You tell Java WHAT property to compare.
+```
+
+```text
+Comparator.naturalOrder()
+        ↓
+The class itself tells Java HOW objects should naturally be ordered
+through Comparable.compareTo().
+```
+
+And this:
+
+```java
+.sorted()
+```
+
+is effectively using the elements' natural ordering as well.
+
+# What is reduce, how its used for same employee exammple, filter and sorting?
+
+reduce() is used when you have many elements and want to combine them into one final result.
+
+With employees, a common example is calculating the total salary.
+
+## 1. Employee list
+
+```java
+List<Employee> employees = List.of(
+    new Employee("John", 50000),
+    new Employee("David", 80000),
+    new Employee("Mike", 40000),
+    new Employee("Alex", 70000)
+);
+```
+
+## 2. reduce() — total salary
+
+```java
+int totalSalary = employees.stream()
+        .map(Employee::getSalary)
+        .reduce(0, (total, salary) -> total + salary);
+```
+
+### Result
+
+```text
+240000
+```
+
+The reduction happens like this:
+
+```text
+0
+ ↓
+0 + 50000  = 50000
+ ↓
+50000 + 80000 = 130000
+ ↓
+130000 + 40000 = 170000
+ ↓
+170000 + 70000 = 240000
+```
+
+So:
+
+```text
+.reduce(0, (total, salary) -> total + salary)
+```
+
+means:
+
+```text
+0             → initial value
+total         → accumulated result
+salary        → current element
+total + salary → how to combine them
+```
+
+## 3. filter() + reduce()
+
+Suppose you want the total salary of employees earning more than 50,000:
+
+```java
+int totalSalary = employees.stream()
+        .filter(e -> e.getSalary() > 50000)
+        .map(Employee::getSalary)
+        .reduce(0, (total, salary) -> total + salary);
+```
+
+### Flow
+
+```text
+Employees
+    ↓
+filter salary > 50,000
+    ↓
+David  80,000
+Alex   70,000
+    ↓
+map salary
+    ↓
+80,000
+70,000
+    ↓
+reduce
+    ↓
+150,000
+```
+
+## 4. filter() + sorted() + reduce()
+
+You can combine all three:
+
+```java
+int totalSalary = employees.stream()
+        .filter(e -> e.getSalary() > 50000)
+        .sorted(Comparator.comparing(Employee::getSalary))
+        .map(Employee::getSalary)
+        .reduce(0, (total, salary) -> total + salary);
+```
+
+But notice something important:
+
+The sorted() is unnecessary for calculating the total.
+
+```text
+.filter(...)
+.sorted(...)    // unnecessary here
+.map(...)
+.reduce(...)
+```
+
+Whether the salaries are:
+
+```text
+70000, 80000
+```
+
+or:
+
+```text
+80000, 70000
+```
+
+the total is still:
+
+```text
+150000
+```
+
+So normally you'd write:
+
+```java
+int totalSalary = employees.stream()
+        .filter(e -> e.getSalary() > 50000)
+        .map(Employee::getSalary)
+        .reduce(0, Integer::sum);
+```
+
+## Think of the three operations this way
+
+```text
+filter()
+   ↓
+WHICH employees do I want?
+```
+
+```text
+sorted()
+   ↓
+IN WHAT ORDER do I want them?
+```
+
+```text
+reduce()
+   ↓
+HOW DO I COMBINE them into ONE result?
+```
+
+For example:
+
+```text
+Employee list
+     ↓
+ filter()       → select IT employees
+     ↓
+ sorted()       → sort by salary
+     ↓
+ map()          → extract salary
+     ↓
+ reduce()       → calculate total
+```
+
+One more important point: reduce() does not necessarily mean addition. You can use it to combine values in many ways—sum, multiplication, find a maximum, concatenate strings, or combine objects—although for common operations like summing salaries, mapToInt(...).sum() is usually clearer.
