@@ -1,0 +1,166 @@
+# Java 8 Functional Interfaces
+
+A functional interface is an interface that has exactly one abstract method.
+
+## 1. Predicate<T>
+
+Used for testing a condition.
+
+Predicate<Integer> p = n -> n > 10;
+
+System.out.println(p.test(15)); // true
+
+Method: boolean test(T t)
+
+---
+
+## 2. Consumer<T>
+
+Used for consuming/processing a value. Does not return a result.
+
+Consumer<String> c = name -> System.out.println(name);
+
+c.accept("Anil");
+
+Method: void accept(T t)
+
+---
+
+## 3. Supplier<T>
+
+Used for supplying/generating a value. Takes no input.
+
+Supplier<String> s = () -> "Hello";
+
+System.out.println(s.get());
+
+Method: T get()
+
+---
+
+## 4. Function<T, R>
+
+Used to convert one value into another.
+
+Function<String, Integer> f = name -> name.length();
+
+System.out.println(f.apply("Anil")); // 4
+
+Method: R apply(T t)
+
+---
+
+## 5. UnaryOperator<T>
+
+Takes one value and returns the same type.
+
+UnaryOperator<Integer> u = n -> n * 2;
+
+System.out.println(u.apply(5)); // 10
+
+Method: T apply(T t)
+
+---
+
+## 6. BinaryOperator<T>
+
+Takes two values of the same type and returns the same type.
+
+BinaryOperator<Integer> b = (a, c) -> a + c;
+
+System.out.println(b.apply(10, 20)); // 30
+
+Method: T apply(T t1, T t2)
+
+---
+
+## 7. BiPredicate<T, U>
+
+Takes two values and returns boolean.
+
+BiPredicate<Integer, Integer> p = (a, b) -> a > b;
+
+System.out.println(p.test(20, 10)); // true
+
+Method: boolean test(T t, U u)
+
+---
+
+## 8. BiConsumer<T, U>
+
+Takes two values and returns nothing.
+
+BiConsumer<String, Integer> c =
+(name, age) -> System.out.println(name + " " + age);
+
+c.accept("Anil", 30);
+
+Method: void accept(T t, U u)
+
+---
+
+## 9. BiFunction<T, U, R>
+
+Takes two values and returns a result.
+
+BiFunction<Integer, Integer, Integer> f =
+(a, b) -> a + b;
+
+System.out.println(f.apply(10, 20)); // 30
+
+Method: R apply(T t, U u)
+
+---
+
+# Other Common Functional Interfaces
+
+## Runnable
+
+Takes no input and returns nothing.
+
+Runnable r = () -> System.out.println("Running");
+
+r.run();
+
+Method: void run()
+
+---
+
+## Callable<V>
+
+Takes no input and returns a value; commonly used with concurrency.
+
+Callable<Integer> c = () -> 100;
+
+System.out.println(c.call());
+
+Method: V call() throws Exception
+
+---
+
+# Quick Summary
+
+Interface | Input | Output | Main Method
+Predicate<T> | 1 | boolean | test()
+Consumer<T> | 1 | nothing | accept()
+Supplier<T> | 0 | T | get()
+Function<T,R> | 1 | R | apply()
+UnaryOperator<T> | 1 | same T | apply()
+BinaryOperator<T> | 2 | same T | apply()
+BiPredicate<T,U> | 2 | boolean | test()
+BiConsumer<T,U> | 2 | nothing | accept()
+BiFunction<T,U,R> | 2 | R | apply()
+Runnable | 0 | nothing | run()
+Callable<V> | 0 | V | call()
+
+# Easy Way to Remember
+
+Predicate → condition → boolean
+
+Consumer → consume → nothing
+
+Supplier → supply → value
+
+Function → convert → value
+
+The Bi... versions generally mean two inputs, while UnaryOperator and BinaryOperator are specialized versions of Function for the same input/output type.
